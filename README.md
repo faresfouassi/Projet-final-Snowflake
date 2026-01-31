@@ -386,6 +386,6 @@ Cette phase vise à créer un **data product centralisé** combinant ventes, pro
 ## Auteur
 
 Projet réalisé dans le cadre du cours Architecture Big Data par:
- **FOUAISSI Mohamed Fares**
- **AMIEL Augustin**
- **ACHOURI Abdenour**
+ - **FOUAISSI Mohamed Fares**
+ - **AMIEL Augustin**
+ - **ACHOURI Abdenour**
