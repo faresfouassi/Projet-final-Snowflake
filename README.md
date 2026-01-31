@@ -312,8 +312,11 @@ Cette phase vise à créer un **data product centralisé** combinant ventes, pro
 
 ### 3.1. Table `ANALYTICS.ventes_enrichies`
 **Description** : Table de faits contenant toutes les transactions de type SALE enrichies avec des dimensions temporelles pour faciliter les analyses de tendances et de saisonnalité.
+
 **Source** : SILVER.financial_transactions_clean (filtrée sur transaction_type = 'SALE')
+
 **Granularité** : Une ligne par transaction de vente
+
 **Clé primaire** : transaction_id
 
 **Colonnes**
