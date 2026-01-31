@@ -284,9 +284,15 @@ Tous les exports sont au format CSV avec horodatage.
 - Coûts logistiques : analyse comparative par transporteur
 
 # Phase 3 – Data Product & Machine Learning
+Cette phase vise à créer un **data product centralisé** combinant ventes, promotions, marketing et dimensions clés, prêt à être consommé par :
+
+- Outils analytiques (dashboards, reporting)
+- Modèles Machine Learning
+- Équipes métier (marketing, commercial, data science)
+
 ## 1 – Création du Data Product
 ### Schéma de données : 
-![alt text](image-16.png)
+![alt text](image-17.png)
 
 ### 3.1. Table `ANALYTICS.ventes_enrichies`
 **Description** : Table de faits contenant toutes les transactions de type SALE enrichies avec des dimensions temporelles pour faciliter les analyses de tendances et de saisonnalité.
