@@ -1,7 +1,9 @@
 # Projet Architecture Big Data "Berbère Lab"
-## VObjectif du projet
+## Objectif du projet
 
-Le projet couvre l'ensemble de la chaîne de valeur : ingestion des données, nettoyage, analyses exploratoires et business, visualisations interactives.
+Projet d'analytics end-to-end pour une entreprise du secteur Food & Beverage, déployé sur Snowflake. Ce projet met en œuvre une architecture data moderne en trois phases : l'ingestion de données multi-sources (CSV et JSON) depuis un bucket S3, la transformation et le nettoyage selon des règles de qualité strictes (médaillon architecture Bronze/Silver), et enfin l'exploitation via des analyses SQL avancées et des dashboards interactifs Streamlit.
+
+L'objectif est de fournir une vision 360° de l'activité commerciale en croisant plusieurs dimensions métier : performance des ventes, efficacité marketing, impact des promotions, satisfaction client, et optimisation logistique. Les dashboards permettent aux décideurs de piloter l'activité en temps réel grâce à des KPIs actionnables et des filtres dynamiques, tout en offrant la possibilité d'exporter les données pour des analyses complémentaires.
 
 
 ## Architecture Technique
@@ -280,6 +282,87 @@ Tous les exports sont au format CSV avec horodatage.
 - Ruptures de stock : taux par catégorie et entrepôt
 - Performance livraison : délais par méthode d'expédition et région
 - Coûts logistiques : analyse comparative par transporteur
+
+# Phase 3 – Data Product & Machine Learning
+## 1 – Création du Data Product
+### Schéma de données : 
+![alt text](image-16.png)
+
+### 3.1. Table `ANALYTICS.ventes_enrichies`
+**Description** : Table de faits contenant toutes les transactions de type SALE enrichies avec des dimensions temporelles pour faciliter les analyses de tendances et de saisonnalité.
+**Source** : SILVER.financial_transactions_clean (filtrée sur transaction_type = 'SALE')
+**Granularité** : Une ligne par transaction de vente
+**Clé primaire** : transaction_id
+
+**Colonnes**
+
+| Colonne | Type | Description |
+|---------|------|-------------|
+| `transaction_id` | VARCHAR | Identifiant unique de transaction (clé de jointure) |
+| `transaction_date` | DATE | Date de la transaction |
+| `annee` | NUMBER | Année de la vente |
+| `mois` | NUMBER | Mois (numérique 1-12) |
+| `mois_aaaamm` | VARCHAR | Mois format YYYY-MM |
+| `jour_semaine_iso` | NUMBER | Jour de semaine ISO (1=Lundi .. 7=Dimanche) |
+| `is_weekend` | NUMBER | Flag week-end (1 si samedi/dimanche, 0 sinon) |
+| `transaction_type` | VARCHAR | Type de transaction (filtré sur 'SALE') |
+| `amount` | NUMBER | Montant de la transaction (>=0) |
+| `payment_method` | VARCHAR | Méthode de paiement |
+| `entity` | VARCHAR | Entité/point d'encaissement |
+| `region` | VARCHAR | Région géographique (dimension de jointure) |
+| `account_code` | VARCHAR | Compte comptable |
+
+### 3.2. Table `ANALYTICS.promotions_actives`
+
+**Description :** Table de dimension contenant toutes les promotions avec des indicateurs d'activité (active/inactive) et de durée, pour faciliter l'analyse d'impact des campagnes promotionnelles.
+
+**Source :** `SILVER.promotions_clean`
+
+**Granularité :** Une ligne par promotion
+
+**Clé primaire :** `promotion_id`
+
+**Colonnes**
+
+| Colonne | Type | Description |
+|---------|------|-------------|
+| `promotion_id` | VARCHAR | Identifiant unique de promotion |
+| `product_category` | VARCHAR | Catégorie de produit concernée |
+| `promotion_type` | VARCHAR | Type de promotion (ex: discount, bundle, etc.) |
+| `discount_percentage` | NUMBER | Pourcentage de remise [0,1] validé en SILVER |
+| `start_date` | DATE | Date de début de la promotion |
+| `end_date` | DATE | Date de fin de la promotion (NULL si illimitée) |
+| `region` | VARCHAR | Région géographique (dimension de jointure) |
+| `is_active` | NUMBER | Flag promotion active (1) ou inactive (0) à date du jour |
+| `duree_jours` | NUMBER | Durée de la promotion en jours |
+
+
+### 3.3. Table `ANALYTICS.clients_enrichis`
+
+**Description :** Table de dimension clients enrichie avec des segments démographiques et socio-économiques calculés pour faciliter les analyses de segmentation et le ciblage marketing.
+
+**Source :** `SILVER.customer_demographics_clean`
+
+**Granularité :** Une ligne par client
+
+**Clé primaire :** `customer_id`
+
+**Colonnes**
+
+| Colonne | Type | Description |
+|---------|------|-------------|
+| `customer_id` | VARCHAR | Identifiant unique client (clé de jointure) |
+| `name` | VARCHAR | Nom du client |
+| `date_of_birth` | DATE | Date de naissance |
+| `age` | NUMBER | Âge calculé (année entière à date du jour) |
+| `age_segment` | VARCHAR | Segment d'âge : '18-24', '25-34', '35-44', '45-59', '60+', 'NA' |
+| `gender` | VARCHAR | Genre du client |
+| `marital_status` | VARCHAR | Statut marital |
+| `annual_income` | NUMBER | Revenu annuel (>=0 validé en SILVER) |
+| `income_bracket` | VARCHAR | Tranche de revenu : '<20k', '20k-49k', '50k-99k', '100k+', 'NA' |
+| `region` | VARCHAR | Région géographique |
+| `country` | VARCHAR | Pays |
+| `city` | VARCHAR | Ville |
 
 ---
 
