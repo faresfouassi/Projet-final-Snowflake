@@ -254,7 +254,8 @@ Tous les exports sont au format CSV avec horodatage.
 - Croissance MoM (Month-over-Month)
 - Saisonnalité hebdomadaire
 - Performance géographique par région
-- **Interpretation business**
+
+**Interpretation business**
 - Les hausses ponctuelles sont cohérentes avec des animations/push marketing ou vagues de promotions.
 - La saisonnalité hebdomadaire ouvre des leviers de yield (promos ciblées les jours creux ; limitation des remises les jours forts).
 
@@ -262,7 +263,8 @@ Tous les exports sont au format CSV avec horodatage.
 - Segmentation démographique (âge, genre, revenu)
 - Distribution géographique
 - Profils socio-économiques
-- **Interpretation business**
+
+**Interpretation business**
 - Les tranches 25–44 sont souvent les plus réactives aux campagnes digitales et sensibles aux promotions limitées. Les tranches à revenu plus élevé réagissent mieux à l’offre premium et aux packs valeur. 
 
 **Dimension Produits**
@@ -277,21 +279,24 @@ Tous les exports sont au format CSV avec horodatage.
 - Impact Promotions : comparaison ventes avec/sans promotion
 - Efficacité par canal : taux de conversion par type de campagne
 - Sensibilité produits : élasticité aux remises par catégorie
-- **Interpretation business**
+
+**Interpretation business**
 - La dispersion ROI confirme que le mix canal doit être piloté finement : quelques campagnes tirent la perf globale, d’autres diluent le budget. Des segments (ex. Millennials / Familles / Pros) répondent différemment selon canal + offre.
 
 **Expérience Client**
 - Satisfaction service : analyse par type d'interaction et catégorie de problème
 - Corrélation durée/satisfaction : impact du temps de résolution
 - Performance produits : relation entre notation et volume d'avis
-- **Interpretation business**
+
+**Interpretation business**
 Les produits avec fort volume et bonne note sont tes locomotives : ils doivent être mis en avant dans les promos légères/cross-sell. Les produits à note basse impactent la conversion : identifier les causes (qualité, logistique, description).
 
 **Opérations et Logistique**
 - Ruptures de stock : taux par catégorie et entrepôt
 - Performance livraison : délais par méthode d'expédition et région
 - Coûts logistiques : analyse comparative par transporteur
-- **Interpretation business**
+
+**Interpretation business**
 - La performance commerciale est bridée par les ruptures : manque à gagner + dégradation de l’UX. Les délai/retards affectent à la fois la conversion (coût d’opportunité) et la satisfaction (avis).
 
 # Phase 3 – Data Product & Machine Learning
