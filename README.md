@@ -1,11 +1,7 @@
-# Berbere Lab - Projet d'Analytics Food & Beverage
-
-## Vue d'ensemble du projet
-
-Projet d'analyse de données end-to-end pour une entreprise du secteur Food & Beverage, implémenté sur **Snowflake** avec des dashboards **Streamlit**. 
+# Projet Architecture Big Data "Berbère Lab"
+## VObjectif du projet
 
 Le projet couvre l'ensemble de la chaîne de valeur : ingestion des données, nettoyage, analyses exploratoires et business, visualisations interactives.
-
 
 
 ## Architecture Technique
@@ -53,243 +49,243 @@ BERBERE_LAB (Database)
 ##  Organisation des fichiers
 
 ### Scripts SQL
-
-1. **setup_snowflake.sql**
+### load_data.sql
+ **setup_snowflake**
    - Création de la database BERBERE_LAB
    - Création des schémas BRONZE et SILVER
    - Configuration du warehouse WH_BRB_LAB
    - Création du stage S3 (STG_FOOD_BEVERAGE)
 
-2. **Create_table.sql**
+ **Create_table**
    - Définition des 11 tables dans le schéma BRONZE
    - Typage des colonnes avec PRIMARY KEY
 
-3. **Load_data.sql**
+ **Chargement de données**
    - Chargement des données depuis S3 vers BRONZE
+
+### clean_data.sql
    - **Nettoyage BRONZE → SILVER** avec :
      - Gestion des doublons (ROW_NUMBER)
      - Traitement des valeurs nulles (TRIM, NULLIF)
      - Validation des données (montants ≥ 0, notes ∈ [1-5])
      - Cohérence des dates (start_date ≤ end_date)
 
-4. **Compréhension_des_jeux_de_données.sql**
-   - Vue d'ensemble de chaque table (volumétrie, périodes)
-   ![alt text](image.png)
-   - Analyse de la qualité des données( valeurs manquantes)
-   - Distributions et profils par table(pour chaque tables on a fait une analyse sur les distribution geographique, par genre, par periode tout depend de la table)
 
-5. **Analyses_exploratoires_descriptives.sql**
-   - Évolution temporelle des ventes (mensuelle, trimestrielle, hebdomadaire)
-   Par mois:
-   ![alt text](image-1.png)
-   Par trimestre:
-   ![alt text](image-2.png)
-   Par jour de la semaine:
-   ![alt text](image-3.png)
+### Compréhension_des_jeux_de_données.sql
+Analyse de la qualité et profil des données :
 
-   - Performance par région
-   ![alt text](image-4.png)
-   - Segmentation clients (âge, revenu, géographie)
-   Par age:
-   ![alt text](image-5.png)
-   Par revenu
-   ![alt text](image-6.png)
+**Vue d'ensemble par table** : volumétrie, périodes couvertes, clés distinctes
 
+![alt text](image.png)
 
-6. **Analyses_business_transverses.sql**
-   - **2.3.1** - Ventes et Promotions (impact, sensibilité par catégorie)
-   impact:
-   ![alt text](image-7.png)
-   sensibilité:
-   ![alt text](image-8.png)
+**Analyse de qualité** : identification des valeurs manquantes par colonne
 
-   - **2.3.2** - Marketing ROI (performance des campagnes)
-   Les compagne les plus éficaces :
-   ![alt text](image-9.png)
-   Eficacité par public cible:
-   ![alt text](image-10.png)
+**Distributions** : analyse par dimension selon la nature de chaque table
+- Géographique (région, pays)
+- Démographique (genre, âge)
+- Temporelle (périodes d'activité)
 
+### 5. Analyses_exploratoires_descriptives.sql
+Analyses descriptives sur les ventes et clients :
 
-   - **2.3.3** - Expérience Client (avis produits, satisfaction service)
-   Avis produit: 
-   ![alt text](image-11.png)
-   Satisfaction par type de transaction
-   ![alt text](image-12.png)
+**Évolution temporelle des ventes**
 
+Par mois :
+![alt text](image-1.png)
 
-   - **2.3.4** - Opérations (ruptures de stock, logistique)
-   Rupture par categorie:
-   ![alt text](image-13.png)
-   logistique:
-   ![alt text](image-14.png)
-   Analyse des retard potentiel:
-   ![alt text](image-15.png)
+Par trimestre :
+![alt text](image-2.png)
 
-### Dashboards Streamlit
+Par jour de la semaine :
+![alt text](image-3.png)
 
-1. **sales_dashboard.py**
-#  Dashboard de Ventes - Guide d'utilisation
+**Performance géographique**
 
-## C'est quoi ce dashboard ?
+![alt text](image-4.png)
 
-Un tableau de bord interactif pour suivre les ventes de l'entreprise. L'idée c'est de pouvoir rapidement voir ce qui marche, ce qui marche moins, et où concentrer ses efforts.
+**Segmentation clients**
 
+Par tranche d'âge :
+![alt text](image-5.png)
 
-### Les KPIs en haut
-- Le chiffre d'affaires total
-- Le nombre de transactions
-- Le panier moyen
-- Le meilleur mois
+Par niveau de revenu :
+![alt text](image-6.png)
 
-### Les graphiques
-1. **Évolution mensuelle** : Pour voir la tendance sur l'année
-2. **Performance par région** : Qui cartonne, qui rame
-3. **Performance par jour de la semaine** : Tes meilleurs jours de vente
+#### 6. Analyses_business_transverses.sql
+Analyses métier croisées sur 4 axes :
 
-### Les filtres (à gauche)
-- **Régions** : Focus sur une zone géographique
-- **Modes de paiement** : Carte, espèces, etc.
-- **Montant minimum** : Pour exclure les petites transactions qui polluent l'analyse
+**2.3.1 - Ventes et Promotions**
 
+Impact des promotions sur les ventes :
+![alt text](image-7.png)
 
-##  Export des données
-- Les ventes mensuelles
-- Les ventes par région
-- La performance hebdomadaire
+Sensibilité des catégories aux promotions :
+![alt text](image-8.png)
 
-Tout en CSV, prêt pour Excel ou Google Sheets.
+**2.3.2 - Marketing ROI**
 
-##  Réinitialiser
+Performance des campagnes marketing :
+![alt text](image-9.png)
 
-Il y'a un bouton "Réinitialiser" dans la sidebar qui remet tout à zéro.
+Efficacité par public cible :
+![alt text](image-10.png)
 
+**2.3.3 - Expérience Client**
 
-2. **marketing_roi.py**
-## C'est quoi ce dashboard ?
+Distribution des avis produits :
+![alt text](image-11.png)
 
-Un outil pour savoir si le budget marketing est bien investi cad on voit combien on dépense, combien ça rapporte, et où le ROI est bon (ou pas).
+Satisfaction par type d'interaction :
+![alt text](image-12.png)
 
-## Ce que ça fait
+**2.3.4 - Opérations et Logistique**
 
-### Les KPIs 
-Direct, tu vois :
-- Le budget total dépensé
-- Les ventes générées par ces campagnes
-- Le ROI moyen (combien tu gagnes pour 1€ investi)
-- La portée totale (combien de personnes touchées)
+Ruptures de stock par catégorie :
+![alt text](image-13.png)
 
+Performance logistique :
+![alt text](image-14.png)
 
-
-### Les sections principales
-
-**1. Top 10 campagnes**
-Les meilleures campagnes par ROI. C'est là que tu vois ce qui marche vraiment. Si une campagne a un ROI de 8x, on sait qu'il faut la répliquer.
-
-**2. Performance par type**
-Email, Social Media, Influencer, Display... Chaque type de campagne a son graphique. On voit direct quel canal convertit le mieux et lequel coûte trop cher pour rien.
-
-**3. Performance par public cible**
-Millennials, Familles, Pros... Quel public réagit le mieux ? 
-
-## 🚨 Les alertes
-
-En bas, si on a des campagnes avec un ROI < 1 (tu perds de l'argent), un gros message rouge apparaît.
-
-**ROI < 1** = on dépense 100€, on récupère 80€. Mauvais deal.
-
-## 💡 Les recommandations
-
-Trois colonnes de conseils :
-- **Vert** : Ce qu'il faut faire (renforcer ce qui marche)
-- **Bleu** : Comment s'améliorer (tester de nouvelles choses)
-- **Orange** : Ce qu'il faut arrêter (couper ce qui ne marche pas)
-
-## Le tableau détaillé
-
-Tout en bas, on a le détail de chaque campagne :
-- Nom de la campagne
-- Type
-- Région
-- Budget
-- Ventes générées
-- ROI
-- Taux de conversion
-
-
-
-3. **promotion_analysis.py**
-## C'est quoi ce dashboard ?
-
-Un dashboard pour comprendre si les promotions fonctionnent vraiment. Est-ce qu'elles boostent les ventes ? Lesquelles marchent le mieux ? Où ? C'est quoi le bon niveau de remise ?
-
-### Les KPI
-  - Impact global
-  - Performance par région
-  - Sensibilité par catégorie
-  - Distribution des remises
-  
-### Les filtres utiles
-
- **Régions
- **Catégories de produits
- **Types de promotions
- **Niveau de remise
-
-
-### Les recommandations
-
-En bas, y'a une section qui donne des conseils basés sur tes données :
-- Si une remise moyenne dépasse 35% → Alerte rouge sur la marge
-- Si une promos durent plus de 20 jours → Attention à la banalisation
-
-## Export
-
- Trois boutons en bas pour télécharger tout en CSV.
-
-
-##  Analyses réalisées
-
-### 1. Analyses Exploratoires
-
-#### Ventes
-- Évolution mensuelle/trimestrielle
-- Croissance MoM (Month-over-Month)
-- Saisonnalité (jour de semaine)
-- Performance géographique
-
-#### Clients
-- Segmentation démographique (âge, genre, revenu)
-- Distribution géographique
-- Profils de revenus
-
-#### Produits
-- Top produits par volume d'avis
-- Distribution des notes (1-5 étoiles)
-- Catégories les plus populaires
-
-### 2. Analyses Business Transverses
-
-#### Marketing & Promotions
-- **ROI Marketing** : Ventes générées / Budget investi
-- **Impact Promotions** : Comparaison ventes avec/sans promo
-- **Efficacité par canal** : Conversion par type de campagne
-- **Sensibilité produits** : Réponse aux remises par catégorie
-
-#### Expérience Client
-- **Satisfaction service** : Par type d'interaction et catégorie problème
-- **Corrélation durée/satisfaction** : Impact du temps de résolution
-- **Performance produits** : Lien entre notes et volume d'avis
-
-#### Opérations & Logistique
-- **Ruptures de stock** : Taux par catégorie et entrepôt
-- **Performance livraison** : Délais par méthode et région
-- **Coûts logistiques** : Analyse par transporteur
+Analyse des retards potentiels :
+![alt text](image-15.png)
 
 ---
 
+## Dashboards Streamlit
 
-## 👨‍💻 Auteur
-Projet réalisé dans le cadre du lab Food & Beverage sur Snowflake
+### 1. sales_dashboard.py
 
-## 📅 Dernière mise à jour
-Janvier 2026
+**Objectif** : Suivi en temps réel des performances commerciales avec filtres interactifs.
+
+**KPIs principaux**
+- Chiffre d'affaires total
+- Nombre de transactions
+- Panier moyen
+- Meilleur mois
+
+**Visualisations**
+- Évolution mensuelle des ventes
+- Performance par région
+- Performance par jour de la semaine
+
+**Filtres disponibles**
+- Régions géographiques (multi-sélection)
+- Modes de paiement
+- Montant minimum de transaction
+
+**Fonctionnalités**
+- Export CSV des données filtrées
+- Tableaux détaillés expandables
+- Comparaison Top 3 régions
+- Bouton réinitialisation des filtres
+
+---
+
+### 2. marketing_roi.py
+
+**Objectif** : Évaluation de l'efficacité des investissements marketing.
+
+**KPIs principaux**
+- Budget total investi
+- Ventes générées
+- ROI moyen (ratio ventes/budget)
+- Portée totale
+
+**Sections d'analyse**
+
+**Top 10 campagnes par ROI** : identification des campagnes les plus rentables
+
+**Performance par type de campagne** : comparaison Email, Social Media, Influencer, Display, etc.
+
+**Performance par public cible** : analyse de la réactivité par segment (Millennials, Familles, Professionnels)
+
+**Alertes automatiques**
+- Message d'alerte si ROI < 1 (perte financière)
+- Indicateur du budget total concerné
+
+**Recommandations stratégiques**
+- Actions à renforcer (campagnes performantes)
+- Axes d'amélioration (tests et optimisations)
+- Actions à stopper (campagnes non rentables)
+
+**Tableau détaillé** : vue exhaustive de toutes les campagnes avec métriques complètes
+
+---
+
+### 3. promotion_analysis.py
+
+**Objectif** : Analyse de l'impact des stratégies promotionnelles sur les ventes.
+
+**Métriques analysées**
+- Impact global des promotions
+- Performance par région
+- Sensibilité par catégorie produit
+- Distribution des niveaux de remise
+
+**Filtres disponibles**
+- Régions géographiques
+- Catégories de produits
+- Types de promotions
+- Plage de niveau de remise (slider 0-100%)
+
+**Recommandations dynamiques**
+
+Le dashboard génère des alertes contextuelles :
+- Si remise moyenne > 35% : alerte sur l'impact marge
+- Si durée moyenne > 20 jours : attention à la banalisation
+
+**Export de données**
+- Analyse par catégorie
+- Analyse par région
+- Distribution des remises
+
+Tous les exports sont au format CSV avec horodatage.
+
+---
+
+## Synthèse des analyses réalisées
+
+### Analyses Exploratoires
+
+**Dimension Ventes**
+- Évolution mensuelle et trimestrielle
+- Croissance MoM (Month-over-Month)
+- Saisonnalité hebdomadaire
+- Performance géographique par région
+
+**Dimension Clients**
+- Segmentation démographique (âge, genre, revenu)
+- Distribution géographique
+- Profils socio-économiques
+
+**Dimension Produits**
+- Classement par volume d'avis
+- Distribution des notes (échelle 1-5)
+- Catégories les plus plébiscitées
+
+### Analyses Business Transverses
+
+**Marketing et Promotions**
+- ROI Marketing : ratio ventes générées / budget investi
+- Impact Promotions : comparaison ventes avec/sans promotion
+- Efficacité par canal : taux de conversion par type de campagne
+- Sensibilité produits : élasticité aux remises par catégorie
+
+**Expérience Client**
+- Satisfaction service : analyse par type d'interaction et catégorie de problème
+- Corrélation durée/satisfaction : impact du temps de résolution
+- Performance produits : relation entre notation et volume d'avis
+
+**Opérations et Logistique**
+- Ruptures de stock : taux par catégorie et entrepôt
+- Performance livraison : délais par méthode d'expédition et région
+- Coûts logistiques : analyse comparative par transporteur
+
+---
+
+## Auteur
+
+Projet réalisé dans le cadre du cours Architecture Big Data par:
+ **FOUAISSI Mohamed Fares**
+ **AMIEL Augustin**
+ **ACHOURI Abdenour**
